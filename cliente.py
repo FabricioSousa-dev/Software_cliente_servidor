@@ -9,7 +9,7 @@ cliente.connect((HOST, PORT))
 print("Conectado ao servidor!")
 
 while True:
-    mensagem = input("Digite uma mensagem (ou 'sair'): ")
+    mensagem = input("Digite uma mensagem : ")
 
     if mensagem.lower() == "sair":
         break
@@ -17,7 +17,7 @@ while True:
     cliente.send(mensagem.encode())
 
     resposta = cliente.recv(1024).decode()
-    print("Servidor respondeu:", resposta)
+    print("O servidor respondeu:", resposta)
 
 cliente.close()
 
