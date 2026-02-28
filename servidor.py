@@ -26,6 +26,9 @@ def atender_cliente(conexao, endereco):
 
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
 servidor.bind((HOST, PORT))
 servidor.listen()
 
