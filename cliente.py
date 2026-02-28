@@ -20,3 +20,5 @@ while True:
     print("Servidor respondeu:", resposta)
 
 cliente.close()
+
+print("******")
