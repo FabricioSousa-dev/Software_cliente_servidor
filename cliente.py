@@ -1,14 +1,22 @@
 import socket
 
-HOST = '127.0.0.1'
+HOST = "127.0.0.1"
 PORT = 5000
 
 cliente = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 cliente.connect((HOST, PORT))
 
-cliente.send('Servidor online!'.encode())
+print("Conectado ao servidor!")
 
-resposta = cliente.recv(1024).decode()
-print("Servidor respondeu: ",resposta)
+while True:
+    mensagem = input("Digite uma mensagem (ou 'sair'): ")
+
+    if mensagem.lower() == "sair":
+        break
+
+    cliente.send(mensagem.encode())
+
+    resposta = cliente.recv(1024).decode()
+    print("Servidor respondeu:", resposta)
 
 cliente.close()

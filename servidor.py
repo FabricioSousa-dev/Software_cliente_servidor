@@ -1,19 +1,38 @@
 import socket
+import threading
+
 HOST = "127.0.0.1"
 PORT = 5000
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((HOST,PORT))
+def atender_cliente(conexao, endereco):
+    print("Cliente conectado:", endereco)
 
-s.listen(1)
-print("Servidor entrando em conexão...")
-conexao, endereço = s.accept()
+    while True:
+        try:
+            mensagem = conexao.recv(1024).decode()
+            if not mensagem:
+                break
 
-print("Cliente conectado: ",endereço)
+            print("Mensagem recebida:", mensagem)
 
-mensagem = conexao.recv(1024).decode()
-print("Mensagem recebida:",mensagem)
+            resposta = f"Servidor recebeu: {mensagem}"
+            conexao.send(resposta.encode())
 
-conexao.send("Recebi sua mensagem!".encode())
-conexao.close()
+        except:
+            break
 
+    print("Cliente desconectado:", endereco)
+    conexao.close()
+
+
+servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+servidor.bind((HOST, PORT))
+servidor.listen()
+
+print("Servidor iniciado...")
+print("Esperando conexões...")
+
+while True:
+    conexao, endereco = servidor.accept()
+    thread = threading.Thread(target=atender_cliente, args=(conexao, endereco))
+    thread.start()
