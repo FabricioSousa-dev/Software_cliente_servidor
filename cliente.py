@@ -21,4 +21,3 @@ while True:
 
 cliente.close()
 
-print("******")
