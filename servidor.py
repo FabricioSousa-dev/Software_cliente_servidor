@@ -15,7 +15,7 @@ def atender_cliente(conexao, endereco):
 
             print("Mensagem recebida:", mensagem)
 
-            resposta = f"Servidor recebeu: {mensagem}"
+            resposta = f"Servidor recebeu {mensagem}"
             conexao.send(resposta.encode())
 
         except:
