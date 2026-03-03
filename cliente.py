@@ -12,6 +12,7 @@ while True:
     mensagem = input("Digite uma mensagem : ")
 
     if mensagem.lower() == "sair":
+        print("Fechando cliente!")
         break
 
     cliente.send(mensagem.encode())
