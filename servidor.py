@@ -5,13 +5,13 @@ from cryptography.fernet import Fernet
 HOST = "127.0.0.1"
 PORT = 5000
 
-# Carregar chave
 with open("chave.key", "rb") as arquivo:
     chave = arquivo.read()
 
 fernet = Fernet(chave)
 
 clientes = []
+
 
 def broadcast(mensagem):
     for cliente in clientes:
@@ -21,8 +21,10 @@ def broadcast(mensagem):
             cliente.close()
             clientes.remove(cliente)
 
+
+#
 def atender_cliente(conexao, endereco):
-    print("Cliente conectado:", endereco)
+    print(f"Cliente conectado: {endereco}")
 
     while True:
         try:
@@ -35,13 +37,15 @@ def atender_cliente(conexao, endereco):
 
             broadcast(mensagem)
 
-        except Exception as e:
-            print("Erro:", e)
+        except Exception as erro:
+            print("Erro:", erro)
             break
 
-    print("Cliente desconectado:", endereco)
+    print(f"Cliente desconectado: {endereco}")
     clientes.remove(conexao)
     conexao.close()
+
+
 
 def enviar_mensagem_servidor():
     while True:
@@ -49,6 +53,8 @@ def enviar_mensagem_servidor():
         mensagem_formatada = f"Servidor: {mensagem}"
         mensagem_criptografada = fernet.encrypt(mensagem_formatada.encode())
         broadcast(mensagem_criptografada)
+
+
 
 servidor = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 servidor.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -58,7 +64,6 @@ servidor.listen()
 print("Servidor iniciado...")
 print("Aguardando conexões...")
 
-# Thread para permitir servidor enviar mensagens
 thread_envio = threading.Thread(target=enviar_mensagem_servidor)
 thread_envio.daemon = True
 thread_envio.start()
